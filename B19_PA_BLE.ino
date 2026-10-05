@@ -5,6 +5,7 @@
 // B19 agrega UNICAMENTE transporte binario de la ventana BP15 (700 IR crudas @100 Hz)
 // por una caracteristica Notify separada. No calcula PA en la ESP32.
 // Los comentarios B17/B18 que siguen documentan la base historica.
+// PA binary packet format is documented in B19_PA_BLE_TRANSPORT.md.
 #include <BLEDevice.h>
 #include <BLEServer.h>
 #include <BLEUtils.h>
