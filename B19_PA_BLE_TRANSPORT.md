@@ -89,3 +89,4 @@ recomputed CRC32.
 
 The ESP32 does not calculate PAS/PAD. Android executes the validated pipeline:
 `700 raw IR @100 Hz -> resample_poly(5,4) -> Butterworth 0.5-8 Hz -> filtfilt -> z-score -> float32 -> TFLite -> PAS/PAD`.
+
