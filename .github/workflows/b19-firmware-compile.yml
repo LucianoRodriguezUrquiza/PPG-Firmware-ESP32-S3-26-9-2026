@@ -1,0 +1,46 @@
+name: B19 firmware compile
+
+on:
+  push:
+    branches:
+      - b19-pa-ble
+    paths:
+      - "B19_PA_BLE.ino"
+      - ".github/workflows/b19-firmware-compile.yml"
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Install ESP32 core 3.3.12
+        run: |
+          arduino-cli config init
+          arduino-cli core update-index
+          arduino-cli core install esp32:esp32@3.3.12
+
+      - name: Install exact external libraries
+        run: |
+          arduino-cli lib install "Adafruit GFX Library@1.12.6"
+          arduino-cli lib install "Adafruit ST7735 and ST7789 Library@1.11.0"
+          arduino-cli lib install "Adafruit BusIO@1.17.4"
+          arduino-cli lib install "SparkFun MAX3010x Pulse and Proximity Sensor Library@1.1.2"
+
+      - name: Prepare Arduino sketch folder
+        run: |
+          mkdir -p build-sketch/B19_PA_BLE
+          cp B19_PA_BLE.ino build-sketch/B19_PA_BLE/B19_PA_BLE.ino
+
+      - name: Compile B19
+        run: |
+          arduino-cli compile \
+            --fqbn 'esp32:esp32:esp32s3:FlashSize=16M,PSRAM=opi,CDCOnBoot=cdc,PartitionScheme=app3M_fat9M_16MB' \
+            --warnings all \
+            build-sketch/B19_PA_BLE
